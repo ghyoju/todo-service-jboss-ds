@@ -1,5 +1,14 @@
 http://localhost:8080/todo-service-1.0-SNAPSHOT/TodoService
 
+@Value("#{ssaDataMasterCitizenshipStatusScalerMap}")
+private HashMap<String, Integer> columnTypeHashMap;
+
+<util:map id="ssaDataMasterCitizenshipStatusScalerMap" map-class="java.util.HashMap" key-type="java.lang.String" value-type="java.lang.Integer">
+    <entry key="tin" value="#{T(org.hibernate.type.SqlTypes).VARCHAR}"/>
+    <entry key="validityCd" value="#{T(org.hibernate.type.SqlTypes).VARCHAR}"/>
+    <entry key="citizenshipInd" value="#{T(org.hibernate.type.SqlTypes).VARCHAR}"/>
+</util:map>
+
 <util:map id="ssaDataMsterCitizenshipStatusScalerMap" map-class="java.util.HashMap" key-type="java.lang.String" value-type="java.lang.String">
     <entry key="tin" value="#{T(org.hibernate.type.SqlTypes).VARCHAR}"/>
     <entry key="validityCd" value="#{T(org.hibernate.type.SqlTypes).VARCHAR}"/>
