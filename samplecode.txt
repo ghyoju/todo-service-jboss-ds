@@ -1,10 +1,11 @@
 http://localhost:8080/todo-service-1.0-SNAPSHOT/TodoService
 
-<util:map id="ssaDataasterCitizenshipStatusScalerMap" map-class="java.util.HashMap" key-type="java.lang.String" value-type="org.hibernate.type.BasicType">
-    <entry key="tin" value="#{T(org.hibernate.type.StandardBasicTypes).STRING.getJdbcMapping()}"/>
-    <entry key="validityCd" value="#{T(org.hibernate.type.StandardBasicTypes).STRING.getJdbcMapping()}"/>
-    <entry key="citizenshipInd" value="#{T(org.hibernate.type.StandardBasicTypes).STRING.getJdbcMapping()}"/>
+<util:map id="ssaDataMsterCitizenshipStatusScalerMap" map-class="java.util.HashMap" key-type="java.lang.String" value-type="java.lang.String">
+    <entry key="tin" value="#{T(org.hibernate.type.SqlTypes).VARCHAR}"/>
+    <entry key="validityCd" value="#{T(org.hibernate.type.SqlTypes).VARCHAR}"/>
+    <entry key="citizenshipInd" value="#{T(org.hibernate.type.SqlTypes).VARCHAR}"/>
 </util:map>
+
 
 
 module.xml
