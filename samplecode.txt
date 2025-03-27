@@ -1,0 +1,105 @@
+http://localhost:8080/todo-service-1.0-SNAPSHOT/TodoService
+
+@Value("#{ssaDataMasterCitizenshipStatusScalerMap}")
+private HashMap<String, org.hibernate.type.BasicTypeReference> columnTypeHashMap;
+
+<util:map id="ssaDataMasterCitizenshipStatusScalerMap" map-class="java.util.HashMap" key-type="java.lang.String" value-type="org.hibernate.type.BasicTypeReference">
+    <entry key="tin" value="#{T(org.hibernate.type.StandardBasicTypes).STRING}"/>
+    <entry key="validityCd" value="#{T(org.hibernate.type.StandardBasicTypes).STRING}"/>
+    <entry key="citizenshipInd" value="#{T(org.hibernate.type.StandardBasicTypes).STRING}"/>
+</util:map>
+
+
+module.xml
+<?xml version="1.0" encoding="UTF-8"?>
+<module xmlns="urn:jboss:module:1.9" name="com.oracle">
+    <resources>
+        <resource-root path="ojdbc11.jar"/>
+    </resources>
+    <dependencies>
+        <module name="javax.api"/>
+        <module name="javax.transaction.api"/>
+    </dependencies>
+</module>
+
+standalone.xml
+drivers
+<driver name="oracle" module="com.oracle">
+    <driver-class>oracle.jdbc.OracleDriver</driver-class>
+</driver>
+datasources
+<datasource jndi-name="java:/OracleDS" pool-name="OracleDS" enabled="true" use-java-context="true">
+    <connection-url>jdbc:oracle:thin:@//localhost:1521/ORCL</connection-url>
+    <driver>oracle</driver>
+    <security>
+        <user-name>your_username</user-name>
+        <password>your_password</password>
+    </security>
+    <pool>
+        <min-pool-size>5</min-pool-size>
+        <max-pool-size>20</max-pool-size>
+    </pool>
+    <validation>
+        <valid-connection-checker class-name="org.jboss.jca.adapters.jdbc.extensions.oracle.OracleValidConnectionChecker"/>
+        <exception-sorter class-name="org.jboss.jca.adapters.jdbc.extensions.oracle.OracleExceptionSorter"/>
+        <stale-connection-checker class-name="org.jboss.jca.adapters.jdbc.extensions.oracle.OracleStaleConnectionChecker"/>
+    </validation>
+</datasource>
+
+===================================
+<subsystem xmlns="urn:jboss:domain:datasources:8.0">
+    <datasources>
+        <xa-datasource jndi-name="java:/jdbc/OracleDS" pool-name="OracleDS" enabled="true" use-java-context="true">
+            <xa-datasource-property name="URL">
+                jdbc:oracle:thin:@//localhost:1521/ORCL
+            </xa-datasource-property>
+            <xa-datasource-property name="User">
+                your_username
+            </xa-datasource-property>
+            <xa-datasource-property name="Password">
+                your_password
+            </xa-datasource-property>
+            <driver>oracle</driver>
+            <pool>
+                <min-pool-size>5</min-pool-size>
+                <max-pool-size>20</max-pool-size>
+            </pool>
+            <validation>
+                <valid-connection-checker class-name="org.jboss.jca.adapters.jdbc.extensions.oracle.OracleValidConnectionChecker"/>
+                <validate-on-match>true</validate-on-match>
+                <exception-sorter class-name="org.jboss.jca.adapters.jdbc.extensions.oracle.OracleExceptionSorter"/>
+            </validation>
+        </xa-datasource>
+        <drivers>
+            <driver name="oracle" module="com.oracle.jdbc">
+                <xa-datasource-class>oracle.jdbc.xa.client.OracleXADataSource</xa-datasource-class>
+            </driver>
+        </drivers>
+    </datasources>
+</subsystem>
+
+
+
+<datasources>
+                <datasource jndi-name="java:jboss/datasources/ExampleDS" pool-name="ExampleDS" enabled="true" use-java-context="true" statistics-enabled="${wildfly.datasources.statistics-enabled:${wildfly.statistics-enabled:false}}">
+                    <connection-url>jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;MODE=${wildfly.h2.compatibility.mode:REGULAR}</connection-url>
+                    <driver>h2</driver>
+                    <security>
+                        <user-name>sa</user-name>
+                        <password>sa</password>
+                    </security>
+                </datasource>
+                <datasource jndi-name="java:/TodoDS" pool-name="TodoDSPool">
+                    <connection-url>jdbc:h2:mem:todo;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE</connection-url>
+                    <driver>h2</driver>
+                    <security>
+                        <user-name>sa</user-name>
+                        <password>sa</password>
+                    </security>
+                </datasource>
+                <drivers>
+                    <driver name="h2" module="com.h2database.h2">
+                        <xa-datasource-class>org.h2.jdbcx.JdbcDataSource</xa-datasource-class>
+                    </driver>
+                </drivers>
+            </datasources>
