@@ -1,17 +1,27 @@
 package com.example.client;
 
+import com.example.todoservice.Todo;
+import com.example.todoservice.TodoService;
+
+import javax.xml.namespace.QName;
+import javax.xml.ws.Service;
+import java.net.URL;
+import java.util.List;
+
 public class Client {
-    public static void main(String[] args) {
-        TodoService service = new TodoService();
-        TodoService port = service.getTodoServicePort();
+    public static void main(String[] args) throws Exception {
+        URL wsdlURL = new URL("http://localhost:8080/todo-service/TodoService?wsdl");
+        QName qname = new QName("http://todoservice.example.com/", "TodoService");
 
-        System.out.println(port.ping());
+        Service service = Service.create(wsdlURL, qname);
+        TodoService todoService = service.getPort(TodoService.class);
 
-        Todo todo = new Todo();
-        todo.setTitle("Buy milk");
-        todo.setDescription("2% fat");
+        todoService.addTodo(new Todo(1, "Write SOAP service"));
+        todoService.addTodo(new Todo(2, "Test client"));
 
-        port.addTodo(todo);
-        System.out.println("Todos: " + port.getTodos().size());
+        List<Todo> todos = todoService.getTodos();
+        for (Todo t : todos) {
+            System.out.println(t.getId() + ": " + t.getTask());
+        }
     }
 }
